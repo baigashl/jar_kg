@@ -24,17 +24,13 @@ class RegisterView(CreateAPIView):
     serializer_class = RegisterSerializer
 
 
-class UserListApiView(ListAPIView):
+class UserListApiView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    # authentication_classes =
-    serializer_class = UserListSerializer
 
-    def get_queryset(self):
-        qs = User.objects.all()
-        query = self.request.GET.get('q')
-        if query is not None:
-            qs = qs.filter(content__icontains=query)
-        return qs
+    def get(self, request):
+        posts = User.objects.all()
+        serializer = UserListSerializer(posts, many=True)
+        return Response(serializer.data)
 
 
 class UserDetailAPIView(APIView):
