@@ -1,12 +1,10 @@
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 from rest_framework import permissions
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-
 from blog.models import Post
 from blog.serializers import PostSerializers
 from .serializers import MyTokenObtainPairSerializer, UserListSerializer
@@ -57,6 +55,7 @@ class UserDetailAPIView(APIView):
         serializer2 = PostSerializers(posts, many=True)
         data = serializer.data
         data['posts'] = serializer2.data
+        data['post_count'] = len(serializer2.data)
         return Response(data)
 
 
